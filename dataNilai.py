@@ -8,22 +8,39 @@ def display_menu():
     print("4. Total Nilai")
     print("5. Keluar")
 
+def tanya_kembali():
+    kembali = input("\nKembali ke menu utama? (y/n): ").lower()
+    if kembali != 'y':
+        print("Terimakasih telah menggunakan layanan kami.")
+        return False
+    return True
+
 def tambah_data():
     print("\n--- Tambah Data Nilai ---")
-    mapel = input("Masukkan nama mata pelajaran: ")
+
+    mapel = input("Masukkan nama mata pelajaran: ").strip()
+    if not mapel:
+        print("Nama mata pelajaran tidak boleh kosong.")
+        return
+
+    mapel_existing = [m.lower() for m, n in aras_nilai]
+    if mapel.lower() in mapel_existing:
+        print(f"Mata pelajaran '{mapel}' sudah ada!")
+        return
 
     while True:
         try:
             nilai = float(input(f"Masukkan nilai untuk {mapel}: "))
 
-            if nilai <= 100:
+            if 0 <= nilai <= 100:
                 aras_nilai.append([mapel, nilai])
+                print(f"Nilai {mapel} berhasil ditambahkan!")
+                break 
             else:
-                print("Angka yang kamu masukan tidak valid. Silahkan coba lagi")
+                print("Nilai harus antara 0 hingga 100. Silakan coba lagi.")
 
         except ValueError:
             print("Input harus berupa angka. Silakan coba lagi.")
-
 
 def lihat_data():
     print("\n--- Data Nilai Mata Pelajaran ---")
@@ -61,23 +78,23 @@ def main():
 
         if choice == '1':
             tambah_data()
-            kembali = input("\nKembali ke menu utama? (y/n): ").lower()
-            if kembali != 'y':
-                print("Terimakasih telah menggunakan layanan kami.")
+            if not tanya_kembali(): 
                 break
                 
         elif choice == '2':
             lihat_data()
-            kembali = input("\nKembali ke menu utama? (y/n): ").lower()
-            if kembali != 'y':
-                print("Terimakasih telah menggunakan layanan kami.")
+            if not tanya_kembali():
                 break
                 
         elif choice == '3':
             hitung_rata_rata()
-            
+            if not tanya_kembali():
+                break
+
         elif choice == '4':
             total_nilai_keseluruhan()
+            if not tanya_kembali(): 
+                break
             
         elif choice == '5':
             print("Terimakasih telah menggunakan layanan kami.")
